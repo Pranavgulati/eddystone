@@ -34,11 +34,11 @@ The value is a signed 8 bit integer as specified by
 The URL Scheme byte defines the identifier scheme and it is a direct correspondence for multiple URL shorteners
 **To Standardize URL formats all URL's used will be shortened by any URL shortener. The following table lists some popular ones and more can be added in the future
 Doing this saves us a lot of payload bytes at the cost of loss of generality. It enables us to work with really low payload capable devices like the nrf24L01
-|Decimal  | Hex        | Expansion
-|:------- | :--------- | :--------
-|0        | 0x00       | `https://goo.gl/`
-|1        | 0x01       | `http://tinyurl.com/`
-|2        | 0x02       | `http://ow.ly/`
+Decimal  | Hex        | Expansion
+:------- | :--------- | :--------
+0        | 0x00       | `https://goo.gl/`
+1        | 0x01       | `http://tinyurl.com/`
+2        | 0x02       | `http://ow.ly/`
 
 ### Eddystone-URL HTTP URL encoding
 
