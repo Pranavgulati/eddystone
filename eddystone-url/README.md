@@ -13,7 +13,7 @@ Byte offset | Field | Description
 0 | Frame Type | Value = `0x10`
 1 | TX Power | Calibrated Tx power at 0 m
 2 | URL Scheme | Encoded Scheme Prefix
-3+ | Encoded URL | Length 0-17
+3+ | Encoded URL | Length 0-11
 
 ### Tx Power Level
 
@@ -29,16 +29,16 @@ The value is a signed 8 bit integer as specified by
 * The value 0x12 is interpreted as +18dBm
 * The value 0xEE is interpreted as -18dBm
 
-### URL Scheme Prefix
+### URL Scheme 
 
-The URL Scheme Prefix byte defines the identifier scheme, an optional prefix and how the remainder of the URL is encoded.
-
+The URL Scheme byte defines the identifier scheme and it is a direct correspondence for multiple URL shorteners
+**To Standardize URL formats all URL's used will be shortened by any URL shortener. The following table lists some popular ones and more can be added in the future
+Doing this saves us a lot of payload bytes at the cost of loss of generality. It enables us to work with really low payload capable devices like the nrf24L01
 |Decimal  | Hex        | Expansion
 |:------- | :--------- | :--------
-|0        | 0x00       | `http://www.`
-|1        | 0x01       | `https://www.`
-|2        | 0x02       | `http://`
-|3        | 0x03       | `https://`
+|0        | 0x00       | `https://goo.gl/`
+|1        | 0x01       | `http://tinyurl.com/`
+|2        | 0x02       | `http://ow.ly/`
 
 ### Eddystone-URL HTTP URL encoding
 
@@ -46,35 +46,17 @@ The HTTP URL scheme is defined by RFC 1738, for example
 `https://goo.gl/S6zT6P`, and is used to designate Internet resources
 accessible using HTTP (HyperText Transfer Protocol).
 
-The encoding consists of a sequence of characters. Character codes
-excluded from the URL encoding are used as text expansion codes. When
-a user agent receives the Eddystone-URL the byte codes in the URL
-identifier are replaced by the expansion text according to the table
-below.
+After receiving the above byte it must be appended by the US-ASCII valid URL characters that are alloted by the URL shortening engine.
 
 |Decimal  | Hex        | Expansion
 |:------- | :--------- | :--------
-|0        | 0x00       | .com/
-|1        | 0x01       | .org/
-|2        | 0x02       | .edu/
-|3        | 0x03       | .net/
-|4        | 0x04       | .info/
-|5        | 0x05       | .biz/
-|6        | 0x06       | .gov/
-|7        | 0x07       | .com
-|8        | 0x08       | .org
-|9        | 0x09       | .edu
-|10       | 0x0a       | .net
-|11       | 0x0b       | .info
-|12       | 0x0c       | .biz
-|13       | 0x0d       | .gov
-|14..32   | 0x0e..0x20 | Reserved for Future Use
-|127..255 | 0x7F..0xFF | Reserved for Future Use
+|48        | 0x30       | `0`
+|49        | 0x31       | `1`
+|..        | ..        | ..
+|122      | 0x7A       | `Z`
 
 Note: 
 * URLs are written only with the graphic printable characters of the US-ASCII coded character set. The octets **00-20** and **7F-FF** hexadecimal are not used. See “Excluded US-ASCII Characters” in RFC 2936.
 * Range **07-13** define the same top level domains as **00-06** without a /.
 
-## See Also
 
-* **[Configuration Service Specification](docs/config-service-spec.md)** — An optional GATT service for configuring the Eddystone-URL output of your beacon
